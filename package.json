@@ -43,6 +43,6 @@
   },
   "devDependencies": {
     "@tsconfig/create-react-app": "^1.0.3",
-    "ts-jest": "^29.0.5"
+    "ts-jest": "^29.1.3"
   }
 }
