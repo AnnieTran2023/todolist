@@ -60,3 +60,33 @@ test("TC3: Add a duplicate todo item", () => {
   expect(screen.getByText("Cancel")).toBeInTheDocument();
 });
 
+test("TC4: Confirm adding duplicate todo", () => {
+  HTMLDialogElement.prototype.showModal = jest.fn();
+
+  render(<TodoApp />);
+
+  fireEvent.change(screen.getByLabelText("Description:"), {
+    target: { value: "Meeting" },
+  });
+  fireEvent.change(screen.getByLabelText("Date:"), {
+    target: { value: "06.05.2024" },
+  });
+  fireEvent.click(screen.getByText("Add"));
+
+  fireEvent.change(screen.getByLabelText("Description:"), {
+    target: { value: "Meeting" },
+  });
+  fireEvent.change(screen.getByLabelText("Date:"), {
+    target: { value: "06.05.2024" },
+  });
+  fireEvent.click(screen.getByText("Add"));
+
+  fireEvent.click(screen.getByText("Keep it"));
+  const rows = screen.getAllByRole("row").length;
+  expect(screen.getByText("Meeting")).toBeInTheDocument();
+
+  expect(rows).toBeGreaterThanOrEqual(2);
+});
+
+
+
