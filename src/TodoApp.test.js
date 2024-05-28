@@ -30,6 +30,9 @@ test("TC2: Remove a todo item", () => {
 });
 
 test("TC3: Add a duplicate todo item", () => {
+  // Mock the showModal method
+  HTMLDialogElement.prototype.showModal = jest.fn();
+
   render(<TodoApp />);
   fireEvent.change(screen.getByLabelText("Description:"), {
     target: { value: "Meeting" },
@@ -38,10 +41,16 @@ test("TC3: Add a duplicate todo item", () => {
     target: { value: "06.05.2024" },
   });
   fireEvent.click(screen.getByText("Add"));
+  fireEvent.change(screen.getByLabelText("Description:"), {
+    target: { value: "Meeting" },
+  });
+  fireEvent.change(screen.getByLabelText("Date:"), {
+    target: { value: "06.05.2024" },
+  });
   fireEvent.click(screen.getByText("Add"));
+
   expect(screen.getByText("Meeting")).toBeInTheDocument();
 
-  // Expect the warning message to be displayed
   expect(
     screen.getByText(
       "The entry is identical with an existing todo. Do you want to keep it?"
@@ -50,3 +59,4 @@ test("TC3: Add a duplicate todo item", () => {
   expect(screen.getByText("Keep it")).toBeInTheDocument();
   expect(screen.getByText("Cancel")).toBeInTheDocument();
 });
+
